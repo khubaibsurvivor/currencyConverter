@@ -1,4 +1,4 @@
-import { useState, useEffect, onChange } from 'react'
+import { useState, useEffect } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from './assets/vite.svg'
 // import heroImg from './assets/hero.png'
@@ -6,24 +6,31 @@ import './App.css'
 
 const url = "https://api.exchangerate-api.com/v4/latest/USD"
 
-function fetchExchangeRate() {
-
-  const response = fetch(url)
-  const data= response.jason()
-  return data.rates.PKR
+async function fetchExchangeRate() {
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.rates.PKR;
+  } catch (error) {
+    console.error('Error fetching exchange rate:', error);
+    return null;
+  }
 }
-useEffect(() => {
-  const fetchRate =  () => {
-    const rate =  fetchExchangeRate();
-    setAnswer(given * rate);
-  };
-  fetchRate();
-}, [given]);
 
 function App() {
   const [amount, setAmount] = useState(0)
   const [answer, setAnswer] = useState(0)
   const [given, setGiven] = useState(0)
+
+  useEffect(() => {
+    const fetchRate = async () => {
+      const rate = await fetchExchangeRate();
+      if (rate) {
+        setAnswer(given * rate);
+      }
+    };
+    fetchRate();
+  }, [given]);
 
   return (
     <>
