@@ -14,7 +14,7 @@ async function fetchExchangeRate(fromCurrency, toCurrency) {
     const response = await fetch(url);
     const data = await response.json();
 
-    return data.rates[toCurrency]; // ✅ dynamic access
+    return data.rates[toCurrency]; 
   } catch (error) {
     console.error("Error fetching exchange rate:", error);
     return null;
